@@ -1,0 +1,21 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Abood Alobada portfolio preview">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FAF9F7"/>
+      <stop offset="1" stop-color="#E7DED3"/>
+    </linearGradient>
+    <linearGradient id="line" x1="220" y1="120" x2="980" y2="520" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2A2420"/>
+      <stop offset="1" stop-color="#7B6F64"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="48" fill="url(#bg)"/>
+  <circle cx="900" cy="180" r="160" fill="#F2ECE6" stroke="#D9CDC1" stroke-width="2"/>
+  <circle cx="900" cy="180" r="88" fill="none" stroke="#B9ABA0" stroke-width="2" stroke-dasharray="10 12"/>
+  <path d="M250 390h270" stroke="url(#line)" stroke-width="18" stroke-linecap="round"/>
+  <path d="M250 450h430" stroke="#B9ABA0" stroke-width="10" stroke-linecap="round"/>
+  <path d="M250 510h360" stroke="#6D6258" stroke-width="10" stroke-linecap="round"/>
+  <text x="250" y="210" fill="#2A2420" font-family="Georgia, serif" font-size="82" letter-spacing="-2">Abood Alobada</text>
+  <text x="250" y="280" fill="#6E655C" font-family="Arial, sans-serif" font-size="34" letter-spacing="5">WEB DEVELOPER | SEO | FIREBASE</text>
+  <text x="250" y="585" fill="#8D837A" font-family="Arial, sans-serif" font-size="24" letter-spacing="2">Fast, clean, and search-friendly portfolio</text>
+</svg>

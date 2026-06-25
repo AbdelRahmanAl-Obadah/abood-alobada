@@ -1,0 +1,59 @@
+{
+  "hero": {
+    "title": "Abdel Rahman Al-Obadah",
+    "subtitle": "Web Development · JavaScript · UI/UX · SEO · Leadership · Flutter",
+    "bio": "Web Developer with 4+ years of experience specializing in JavaScript, HTML, CSS, and modern digital experiences. Built 30+ websites, led teams of 15, reached 20,000+ monthly users, and achieved 4th place nationally in Jordan's Himmah civic tech competition.",
+    "location": "Abu Dhabi, UAE · Irbid, Jordan",
+    "statWebsites": "30+",
+    "statUsers": "20,000+",
+    "statTeam": "15",
+    "statBlogYears": "8+",
+    "statWebExp": "4+"
+  },
+  "about": {
+    "text": "A passionate web developer with <em>4+ years of experience</em> specializing in JavaScript, HTML, CSS, UI/UX, Flutter, and modern digital experiences. Contributed to multiple real-world projects focused on building user-friendly interfaces and scalable solutions. Built <em>30+ websites</em> through freelance work and currently pursuing a Bachelor of Technology in Computer Science at Jordan University of Science and Technology — GPA 3.7. Combines academic knowledge with practical experience to deliver impactful digital products. Based between <em>Abu Dhabi, UAE</em> and <em>Irbid, Jordan</em>."
+  },
+  "highlights": {
+    "aboutSecondary": "Combines academic knowledge with practical experience to deliver impactful digital products. Based between <em>Abu Dhabi, UAE</em> and <em>Irbid, Jordan</em>.",
+    "monthlyUsers": "Across educational blogs.",
+    "featuredProject": "Himmah — Jordan nationwide competition."
+  },
+  "experience": {
+    "exp1": { "order": 40, "period": "Mar 2026 – Present", "company": "Fiverr", "title": "Freelance Web Developer", "desc": "Building websites and digital products for clients. Specializing in front-end development, UI/UX, Firebase integration, and SEO optimization. Remote from Amman, Jordan.", "tags": ["HTML", "CSS", "JavaScript", "Firebase", "SEO", "UX", "Cloud Storage"] },
+    "exp2": { "order": 30, "period": "Jan 2026 – Present", "company": "Ghirass Team", "title": "Social Media Team Member", "desc": "Creating engaging technical content, appearing in educational videos, proposing creative ideas, and organizing & volunteering in technical events.", "tags": ["Content Creation", "Video", "Events", "Community"] },
+    "exp3": { "order": 20, "period": "Sep 2023 – Nov 2024", "company": "Freelancer.com", "title": "Web Developer & Video Editor", "desc": "Developed over 30 websites using HTML, JavaScript, and CSS — enhancing user experience and functionality. Collaborated with clients as a video editor, delivering high-quality content for four distinct projects. Based in Abu Dhabi, UAE (Remote).", "tags": ["HTML5", "CSS", "JavaScript", "Video Editing", "UI/UX", "PHP"] },
+    "exp4": { "order": 10, "period": "Sep 2018 – Present", "company": "Self-employed (Blogger)", "title": "Team Leader — Educational Blogging", "desc": "Led a team of 15 student contributors across multiple educational blogs serving school students in the UAE. Managed content strategy, editorial planning, SEO, and analytics. Reached approximately 20,000 monthly visitors consistently over 8+ years. Based in Dubai, UAE (Remote).", "tags": ["Leadership", "SEO", "Content Strategy", "Analytics", "Blogger", "XML", "Wireframing"] }
+  },
+  "projects": {
+    "proj1": { "order": 60, "featured": true, "category": "competition", "title": "Himmah — National Civic App", "desc": "Civic technology platform built for a national competition organized by the Independent Elections Commission, Jordanian Parliament & the Crown Prince Foundation. Achieved 4th place nationally in Jordan.", "tech": ["Flutter", "React", "PHP", "Tailwind CSS", "SQL", "MySQL"], "url": "" },
+    "proj2": { "order": 50, "featured": false, "category": "blog", "title": "8th Grade UAE", "desc": "Educational blog supporting middle school students in the UAE. Founded and led as Project Lead. Managed 15 student contributors, attracting ~20,000 monthly visitors over 8+ years. Applied SEO best practices and analytics tracking.", "tech": ["Blogger", "SEO", "XML", "Content Strategy", "Leadership"], "url": "https://eightgradeuae.blogspot.com/" },
+    "proj3": { "order": 40, "featured": false, "category": "blog", "title": "DT Robot Club", "desc": "Educational STEM blog for school students focused on robotics and technology. Founded as Project Lead, managed 15-member team, ~20,000 monthly visitors, active for 8+ years.", "tech": ["Blogger", "SEO", "XML", "Team Leadership"], "url": "https://dtrobotclub.blogspot.com/" },
+    "proj4": { "order": 30, "featured": false, "category": "web", "title": "Just4Just", "desc": "Sleek, responsive web platform hosted on Netlify, built with HTML, CSS, and JavaScript. Designed for seamless desktop and mobile experience with intuitive UI/UX.", "tech": ["HTML", "CSS", "JavaScript", "Netlify", "Web Development"], "url": "https://just4just.netlify.app/" },
+    "proj5": { "order": 20, "featured": false, "category": "web", "title": "Mousa Alobada Website", "desc": "Modern, responsive personal website deployed on Netlify. Clean UI/UX with performance-optimized front-end. Professional presentation tailored for real audience needs.", "tech": ["HTML", "CSS", "JavaScript", "Netlify"], "url": "https://mousalobada.netlify.app/" },
+    "proj6": { "order": 10, "featured": false, "category": "web", "title": "Al Shola School Website", "desc": "Full educational platform with school programs, fees, weekly plans, photo albums, location details, and a student helper tool. Deployed on Netlify.", "tech": ["HTML", "CSS", "JavaScript", "Netlify", "JSON"], "url": "https://sholaskl.netlify.app/" }
+  },
+  "skills": {
+    "technical": ["HTML", "HTML5", "CSS", "JavaScript", "C++", "PHP", "JSON", "XML", "React", "Flutter", "SQL", "MySQL", "Firebase", "Cloud Storage", "Tailwind CSS"],
+    "professional": ["SEO", "UI/UX", "Wireframing", "Web Development", "Front-End Development", "Figma", "Blogging", "Information Technology", "Computer Science"],
+    "soft": ["Leadership", "Team Management", "Research Skills", "Communication", "Problem Solving", "Editorial Planning", "Content Strategy", "English (C1 Advanced)"]
+  },
+  "certifications": {
+    "cert1": { "order": 90, "name": "Creating Compelling Reports", "issuer": "Cisco", "date": "Apr 2026", "url": "https://www.credly.com/badges/851044c0-0bd0-4d19-9698-01fc35a1b570" },
+    "cert2": { "order": 80, "name": "Introduction to Greenhouse Gas Accounting for IT", "issuer": "Cisco", "date": "May 2026", "url": "https://www.credly.com/badges/d41a7fd8-7c2d-49d6-adac-6c6f47a23bea" },
+    "cert3": { "order": 70, "name": "Introduction to Data Science", "issuer": "Cisco", "date": "May 2026", "url": "https://www.credly.com/badges/25d0f02c-ab11-4be1-9215-db14e3b40476" },
+    "cert4": { "order": 60, "name": "Artificial Intelligence Fundamentals", "issuer": "Crown Prince Foundation", "date": "Mar 2026", "url": "https://www.udacity.com/certificate/e/47163e36-1bca-11f1-866c-e39bd06818a3" },
+    "cert5": { "order": 50, "name": "C++ Essentials 2", "issuer": "Cisco", "date": "Mar 2026", "url": "https://www.credly.com/badges/8fa81623-2a84-4173-8b27-8b4408724152" },
+    "cert6": { "order": 45, "name": "C++ Essentials 1", "issuer": "Cisco", "date": "Mar 2026", "url": "https://www.credly.com/badges/e94d5941-0e56-4474-9849-e7da514f58f2" },
+    "cert7": { "order": 40, "name": "English for Information Technology 2", "issuer": "Cisco", "date": "Nov 2025", "url": "https://www.credly.com/badges/f7ca12d6-4b3d-42cb-9910-a083af932346" },
+    "cert8": { "order": 35, "name": "English in Information Technology 1", "issuer": "Cisco", "date": "Dec 2025", "url": "https://www.credly.com/badges/6aac875a-8505-423f-b3f3-d2e9d99f42da" },
+    "cert9": { "order": 30, "name": "C1 Advanced English — Fluent", "issuer": "Cambly Inc.", "date": "Jan 2025", "url": "https://www.cambly.com/en/certificate/verify/0dcad011" }
+  },
+  "education": {
+    "edu1": { "order": 30, "degree": "B.Tech · Computer Science", "school": "Jordan University of Science & Technology", "field": "Computer Science · Faculty of Computer and Information Technology", "period": "2025 – 2028", "gpa": "3.7", "note": "C++, Information Technology, Computer Science. Skills: Front-End Development, CSS, Web Development." },
+    "edu2": { "order": 20, "degree": "High School Diploma", "school": "Emirates Private School", "field": "Scientific Track — Abu Dhabi, UAE", "period": "2023 – 2025", "gpa": "", "note": "Computer Science track with strong performance in technical subjects." },
+    "edu3": { "order": 10, "degree": "Secondary Education", "school": "Al Shola School", "field": "Dubai, United Arab Emirates", "period": "2018 – 2023", "gpa": "", "note": "Front-end development, CSS, and Computer Science skills developed during this period." }
+  },
+  "volunteering": {
+    "vol1": { "order": 10, "period": "Jan 2026 – Present", "org": "Ghirass Team", "role": "Social Media Volunteer", "desc": "Technical content creation, appearing in educational videos, proposing creative ideas, organizing and volunteering in technical events. Community engagement and outreach." }
+  }
+}
