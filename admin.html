@@ -390,6 +390,10 @@ textarea{resize:vertical;line-height:1.6}
       <svg width="14" height="14" fill="none" viewBox="0 0 16 16"><rect x="1" y="1" width="14" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 14h8M8 11v3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
       Projects
     </div>
+    <div class="nav-item" data-page="categories">
+      <svg width="14" height="14" fill="none" viewBox="0 0 16 16"><path d="M2 4h12M2 8h8M2 12h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="13" cy="8" r="1.5" fill="currentColor"/></svg>
+      Categories
+    </div>
     <div class="nav-item" data-page="skills">
       <svg width="14" height="14" fill="none" viewBox="0 0 16 16"><path d="M3 8h10M8 3v10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
       Skills
@@ -739,6 +743,17 @@ textarea{resize:vertical;line-height:1.6}
   <div style="margin-top:.75rem"><button class="add-btn" onclick="addProjItem()">＋ Add Project</button></div>
 </div>
 
+<!-- CATEGORIES -->
+<div class="page" id="page-categories">
+  <div class="page-header">
+    <div><div class="page-title">Categories</div><div class="page-sub">Manage project categories. Drag to reorder filters on the website.</div></div>
+    <button class="btn btn-ghost" onclick="addCategoryItem()">+ Add</button>
+  </div>
+  <div class="section-stats" id="stats-categories"></div>
+  <div class="item-list" id="cat-list-admin"></div>
+  <div style="margin-top:.75rem"><button class="add-btn" onclick="addCategoryItem()">＋ Add Category</button></div>
+</div>
+
 <!-- SKILLS -->
 <div class="page" id="page-skills">
   <div class="page-header"><div><div class="page-title">Skills</div><div class="page-sub">Manage skill tags. Type and press Enter to add.</div></div></div>
@@ -934,15 +949,17 @@ textarea{resize:vertical;line-height:1.6}
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-auth.js";
 import { getDatabase, ref, onValue, set, push, remove, update, runTransaction } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-database.js";
+import * as Categories from "./js/categories.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_APIKEY_HERE",
+  apiKey: "AIzaSyBdcGU6hMiMxI8uYc5Gr2tjTclx9w2E4Zs",
   authDomain: "abood-a28b3.firebaseapp.com",
+  databaseURL: "https://abood-a28b3-default-rtdb.firebaseio.com",
   projectId: "abood-a28b3",
   storageBucket: "abood-a28b3.firebasestorage.app",
   messagingSenderId: "140930268741",
   appId: "1:140930268741:web:8bdd8aa9a6ab4d2ab7ed2c",
-  databaseURL: "https://abood-a28b3-default-rtdb.firebaseio.com"
+  measurementId: "G-CNYV2R8PYY"
 };
 
 const isDemo = firebaseConfig.apiKey === "YOUR_API_KEY";
@@ -957,6 +974,7 @@ try {
 } catch(e){}
 
 window._fb = { auth, db, ref, set, push, remove, update, signOut, onValue, isDemo, runTransaction };
+window._categories = Categories;
 
 window._legacySiteData = {
   hero: {
@@ -974,10 +992,11 @@ window._legacySiteData = {
     exp3: { order: 20, status: 'published', featured: false, pinned: false, period: "Sep 2023 – Nov 2024", company: "Freelancer.com", title: "Web Developer & Video Editor", desc: "Developed over 30 websites using HTML, JavaScript, and CSS — enhancing user experience and functionality. Collaborated with clients as a video editor, delivering high-quality content for four distinct projects.", tags: ["HTML5", "CSS", "JavaScript", "Video Editing", "UI/UX", "PHP"] },
     exp4: { order: 10, status: 'published', featured: false, pinned: false, period: "Sep 2018 – Present", company: "Self-employed (Blogger)", title: "Team Leader — Educational Blogging", desc: "Led a team of 15 student contributors across multiple educational blogs serving school students in the UAE. Managed content strategy, editorial planning, SEO, and analytics.", tags: ["Leadership", "SEO", "Content Strategy", "Analytics", "Blogger", "XML", "Wireframing"] }
   },
+  categories: Categories.DEFAULT_CATEGORIES,
   projects: {
     proj1: { order: 60, status: 'published', featured: true, pinned: true, category: "competition", title: "Himmah — National Civic App", desc: "Civic technology platform built for a national competition organized by the Independent Elections Commission, Jordanian Parliament & the Crown Prince Foundation. Achieved 4th place nationally in Jordan.", tech: ["Flutter", "React", "PHP", "Tailwind CSS", "SQL", "MySQL"], url: "" },
-    proj2: { order: 50, status: 'published', featured: false, pinned: false, category: "blog", title: "8th Grade UAE", desc: "Educational blog supporting middle school students in the UAE.", tech: ["Blogger", "SEO", "XML", "Content Strategy", "Leadership"], url: "https://eightgradeuae.blogspot.com/" },
-    proj3: { order: 40, status: 'published', featured: false, pinned: false, category: "blog", title: "DT Robot Club", desc: "Educational STEM blog for school students focused on robotics and technology.", tech: ["Blogger", "SEO", "XML", "Team Leadership"], url: "https://dtrobotclub.blogspot.com/" },
+    proj2: { order: 50, status: 'published', featured: false, pinned: false, category: "blogs", title: "8th Grade UAE", desc: "Educational blog supporting middle school students in the UAE.", tech: ["Blogger", "SEO", "XML", "Content Strategy", "Leadership"], url: "https://eightgradeuae.blogspot.com/" },
+    proj3: { order: 40, status: 'published', featured: false, pinned: false, category: "blogs", title: "DT Robot Club", desc: "Educational STEM blog for school students focused on robotics and technology.", tech: ["Blogger", "SEO", "XML", "Team Leadership"], url: "https://dtrobotclub.blogspot.com/" },
     proj4: { order: 30, status: 'published', featured: false, pinned: false, category: "web", title: "Just4Just", desc: "Sleek, responsive web platform hosted on Netlify.", tech: ["HTML", "CSS", "JavaScript", "Netlify", "Web Development"], url: "https://just4just.netlify.app/" },
     proj5: { order: 20, status: 'published', featured: false, pinned: false, category: "web", title: "Mousa Alobada Website", desc: "Modern, responsive personal website deployed on Netlify.", tech: ["HTML", "CSS", "JavaScript", "Netlify"], url: "https://mousalobada.netlify.app/" },
     proj6: { order: 10, status: 'published', featured: false, pinned: false, category: "web", title: "Al Shola School Website", desc: "Full educational platform with school programs, fees, weekly plans, photo albums.", tech: ["HTML", "CSS", "JavaScript", "Netlify", "JSON"], url: "https://sholaskl.netlify.app/" }
@@ -1037,15 +1056,43 @@ document.getElementById('loginPass').addEventListener('keydown',e=>{if(e.key==='
 document.getElementById('logoutBtn').addEventListener('click',()=>signOut(auth));
 
 window._data = {
-  hero:{},about:{},highlights:{},experience:{},projects:{},skills:{technical:[],professional:[],soft:[]},
+  hero:{},about:{},highlights:{},experience:{},categories:{},projects:{},skills:{technical:[],professional:[],soft:[]},
   certifications:{},education:{},volunteering:{}
 };
 
+async function seedCategoriesIfMissing(){
+  const snap = await new Promise(resolve => {
+    onValue(ref(db,'site/categories'), s => resolve(s), { onlyOnce: true });
+  });
+  if(!snap.exists() || !Object.keys(snap.val()||{}).length){
+    await set(ref(db,'site/categories'), Categories.DEFAULT_CATEGORIES);
+  }
+}
+
+async function migrateProjectCategories(){
+  const cats = window._data.categories || Categories.DEFAULT_CATEGORIES;
+  const projects = window._data.projects || {};
+  const updates = Categories.normalizeProjectsCategories(projects, cats);
+  const keys = Object.keys(updates);
+  if(!keys.length) return;
+  await Promise.all(keys.map(k => set(ref(db, `site/projects/${k}/category`), updates[k].category)));
+}
+
 function loadAll(){
-  const paths=['hero','about','highlights','experience','projects','skills','certifications','education','volunteering'];
+  seedCategoriesIfMissing().catch(()=>{});
+  const paths=['hero','about','highlights','experience','categories','projects','skills','certifications','education','volunteering'];
   paths.forEach(p=>{
     onValue(ref(db,'site/'+p),snap=>{
-      window._data[p]=snap.val()||(p==='skills'?{technical:[],professional:[],soft:[]}:{});
+      const empty = p==='skills' ? {technical:[],professional:[],soft:[]} : {};
+      window._data[p]=snap.val()||empty;
+      if(p==='categories' && (!snap.val() || !Object.keys(snap.val()).length)){
+        window._data.categories = Categories.DEFAULT_CATEGORIES;
+      }
+      if(p==='categories'){
+        migrateProjectCategories().then(()=>{
+          if(window._data.projects) renderSection('projects');
+        }).catch(()=>{});
+      }
       renderSection(p);
     });
   });
@@ -1054,6 +1101,15 @@ window._loadAll=loadAll;
 </script>
 
 <script>
+const Categories = {
+  get DEFAULT_CATEGORIES(){ return window._categories?.DEFAULT_CATEGORIES ?? {}; },
+  slugify(n){ return window._categories?.slugify(n) ?? String(n||'').trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); },
+  getSortedCategories(d,o){ return window._categories?.getSortedCategories(d,o) ?? []; },
+  buildCategorySelectOptions(d,s,o){ return window._categories?.buildCategorySelectOptions(d,s,o) ?? []; },
+  getCategoryLabel(d,s){ return window._categories?.getCategoryLabel(d,s) ?? (s||'Uncategorized'); },
+  normalizeProjectsCategories(p,c){ return window._categories?.normalizeProjectsCategories(p,c) ?? {}; }
+};
+
 // ===== NAV =====
 function nav(page){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===page));
@@ -1616,6 +1672,7 @@ function renderSection(p){
   if(p==='about') renderAbout(d.about);
   if(p==='highlights') renderHighlights(d.highlights);
   if(p==='experience'){ renderList('exp-list-admin',d.experience,expCardHTML,'experience'); renderSectionStats('experience',d.experience); }
+  if(p==='categories'){ renderList('cat-list-admin',d.categories,catCardHTML,'categories'); renderCategoryStats(d.categories); }
   if(p==='projects'){ renderList('proj-list-admin',d.projects,projCardHTML,'projects'); renderSectionStats('projects',d.projects); }
   if(p==='skills'){ renderSkills(d.skills); renderSkillStats(d.skills); }
   if(p==='certifications'){ renderList('cert-list-admin',d.certifications,certCardHTML,'certifications'); renderSectionStats('certifications',d.certifications); }
@@ -1886,19 +1943,153 @@ window.addExpItem=function(){
   list.querySelectorAll('.tags-editor').forEach(initTagsEditor);
 };
 
+function renderCategoryStats(data){
+  const el=document.getElementById('stats-categories');
+  if(!el) return;
+  const items=Categories.getSortedCategories(data||{});
+  const active=items.filter(i=>i.active).length;
+  const hidden=items.filter(i=>!i.active).length;
+  el.innerHTML=`<span class="section-stat">Total <strong>${items.length}</strong></span><span class="section-stat" style="color:var(--green)">Visible <strong>${active}</strong></span>${hidden?`<span class="section-stat">Hidden <strong>${hidden}</strong></span>`:''}`;
+}
+
+function categorySelectHTML(selectedSlug){
+  const cats=window._data.categories||Categories.DEFAULT_CATEGORIES;
+  const options=Categories.buildCategorySelectOptions(cats, selectedSlug);
+  return options.map(o=>`<option value="${esc(o.slug)}"${o.selected?' selected':''}>${esc(o.name)}</option>`).join('');
+}
+
+function catCardHTML(key,item,section){
+  const active=item.active!==false;
+  const slug=item.slug||Categories.slugify(item.name||'');
+  return `<div class="item-card" id="ic-${key}">
+    <div class="item-card-header">
+      <div style="display:flex;align-items:flex-start;gap:.75rem;flex:1;min-width:0">
+        <span class="drag-handle" draggable="true" title="Drag to reorder">⋮⋮</span>
+        <div style="min-width:0">
+          <div class="item-card-title">${esc(item.name||'Untitled')}</div>
+          <div class="item-card-sub">${esc(slug)} · Order ${Number(item.order)||0}</div>
+          <div class="item-badges">${active?'<span class="status-badge status-published"><span class="status-dot"></span>Visible</span>':'<span class="status-badge status-hidden"><span class="status-dot"></span>Hidden</span>'}</div>
+        </div>
+      </div>
+      <div class="item-card-actions">
+        <button class="btn btn-ghost" style="font-size:.72rem;padding:.3rem .55rem" onclick="moveCategoryItem('${key}','up')" title="Move up">↑</button>
+        <button class="btn btn-ghost" style="font-size:.72rem;padding:.3rem .55rem" onclick="moveCategoryItem('${key}','down')" title="Move down">↓</button>
+        <button class="btn btn-success" style="font-size:.72rem;padding:.3rem .7rem" onclick="saveCategoryItem('${key}')">Save</button>
+        <button class="btn btn-danger" style="font-size:.72rem;padding:.3rem .7rem" onclick="deleteCategoryItem('${key}')">Delete</button>
+      </div>
+    </div>
+    <div class="item-card-body">
+      <div class="row2">
+        <div class="fg"><label>Name</label><input data-f="name" value="${esc(item.name)}" oninput="autoSlugCategory('${key}',this)"></div>
+        <div class="fg"><label>Slug</label><input data-f="slug" value="${esc(slug)}" data-slug-manual="${item._slugManual?'true':'false'}" oninput="this.dataset.slugManual='true'"></div>
+      </div>
+      <div class="row2">
+        <div class="fg"><label>Display Order</label><input data-f="order" type="number" value="${Number(item.order)||0}" readonly></div>
+        <div class="fg"><label>Visible</label>
+          <select data-f="active">
+            <option value="true" ${active?'selected':''}>Yes</option>
+            <option value="false" ${!active?'selected':''}>No</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+window.autoSlugCategory=function(key,nameInput){
+  const card=document.getElementById('ic-'+key);
+  if(!card) return;
+  const slugEl=card.querySelector('[data-f="slug"]');
+  if(!slugEl || slugEl.dataset.slugManual==='true') return;
+  slugEl.value=Categories.slugify(nameInput.value);
+};
+
+window.addCategoryItem=function(){
+  const key='cat_'+Date.now();
+  const total=Object.keys(window._data.categories||{}).length;
+  const item={name:'',slug:'',order:total+1,active:true};
+  const list=document.getElementById('cat-list-admin');
+  list.insertAdjacentHTML('afterbegin',catCardHTML(key,item,'categories'));
+  syncCardOrders(list);
+  list.querySelector('.item-card .item-card-body').classList.add('open');
+};
+
+window.saveCategoryItem=async function(key){
+  const card=document.getElementById('ic-'+key);
+  if(!card) return;
+  const name=card.querySelector('[data-f="name"]').value.trim();
+  const slugInput=card.querySelector('[data-f="slug"]');
+  let slug=slugInput.value.trim();
+  if(!name){ toast('Category name is required','err'); return; }
+  if(!slug) slug=Categories.slugify(name);
+  slug=Categories.slugify(slug);
+  const order=Number(card.dataset.order||card.querySelector('[data-f="order"]').value)||0;
+  const active=card.querySelector('[data-f="active"]').value==='true';
+  const existing=Categories.getSortedCategories(window._data.categories||{}).filter(c=>c.key!==key);
+  if(existing.some(c=>c.slug===slug)){ toast('Slug already in use','err'); return; }
+  try{
+    await fbSet(`site/categories/${key}`,{name,slug,order,active});
+    if(window._data.projects) renderList('proj-list-admin',window._data.projects,projCardHTML,'projects');
+    toast('Category saved ✓');
+  }catch(e){ toast('Error: '+e.message,'err'); }
+};
+
+window.deleteCategoryItem=async function(key){
+  const cat=window._data.categories?.[key];
+  const name=cat?.name||'this category';
+  if(!confirm(`Delete "${name}"? Projects will keep their category slug until reassigned.`)) return;
+  try{
+    await fbRemove(`site/categories/${key}`);
+    const card=document.getElementById('ic-'+key);
+    if(card){
+      const container=card.parentElement;
+      card.remove();
+      if(container){ syncCardOrders(container); await persistCardOrder(container,'categories'); }
+    }
+    toast('Category deleted');
+    if(window._data.projects) renderList('proj-list-admin',window._data.projects,projCardHTML,'projects');
+  }catch(e){ toast('Error: '+e.message,'err'); }
+};
+
+window.moveCategoryItem=async function(key,direction){
+  const list=document.getElementById('cat-list-admin');
+  if(!list) return;
+  const cards=[...list.querySelectorAll('.item-card')];
+  const idx=cards.findIndex(c=>c.id==='ic-'+key);
+  if(idx<0) return;
+  const targetIdx=direction==='up'?idx-1:idx+1;
+  if(targetIdx<0||targetIdx>=cards.length) return;
+  const dragged=cards[idx];
+  const target=cards[targetIdx];
+  if(direction==='up') list.insertBefore(dragged,target);
+  else list.insertBefore(target,dragged);
+  syncCardOrders(list);
+  try{
+    await persistCardOrder(list,'categories');
+    const updates=[...list.querySelectorAll('.item-card')].map(card=>{
+      const k=card.id.replace(/^ic-/,'');
+      const order=Number(card.dataset.order||0);
+      return fbSet(`site/categories/${k}/order`,order);
+    });
+    await Promise.all(updates);
+    toast('Order updated ✓');
+  }catch(e){ toast('Order update failed: '+e.message,'err'); }
+};
+
 // ===== PROJECTS CARD =====
 function projCardHTML(key,item,section){
   const tagsStr=(item.tech||[]).join(',');
   const status=item.status||'published';
   const featured=item.featured||false;
   const pinned=item.pinned||false;
+  const catLabel=Categories.getCategoryLabel(window._data.categories||{}, item.category||'');
   return `<div class="item-card${pinned?' pinned':''}" id="ic-${key}">
     <div class="item-card-header">
       <div style="display:flex;align-items:flex-start;gap:.75rem;flex:1;min-width:0">
         <span class="drag-handle" draggable="true" title="Drag to reorder">⋮⋮</span>
         <div style="min-width:0">
           <div class="item-card-title">${esc(item.title||'Untitled')}${featured?` <span class="feature-badge">⭐ Featured</span>`:''}${pinned?` <span class="pin-badge">📌 Pinned</span>`:''}</div>
-          <div class="item-card-sub">${esc(item.category||'')}</div>
+          <div class="item-card-sub">${esc(catLabel)}</div>
           <div class="item-badges">${statusBadgeHTML(status)}</div>
         </div>
       </div>
@@ -1910,7 +2101,9 @@ function projCardHTML(key,item,section){
     <div class="item-card-body">
       <div class="row2">
         <div class="fg"><label>Title</label><input data-f="title" value="${esc(item.title)}"></div>
-        <div class="fg"><label>Category (web/mobile/blog/competition)</label><input data-f="category" value="${esc(item.category)}"></div>
+        <div class="fg"><label>Category</label>
+          <select data-f="category">${categorySelectHTML(item.category||'')}</select>
+        </div>
       </div>
       <div class="fg"><label>Description</label><textarea data-f="desc" rows="3">${esc(item.desc)}</textarea></div>
       <div class="row2">
@@ -1944,7 +2137,8 @@ function projCardHTML(key,item,section){
 }
 window.addProjItem=function(){
   const key='proj_'+Date.now();
-  const item={title:'',category:'web',desc:'',url:'',github:'',tech:[],order:0,status:'draft',featured:false,pinned:false};
+  const defaultCat=Categories.getSortedCategories(window._data.categories||{}, {activeOnly:true})[0]?.slug||'web';
+  const item={title:'',category:defaultCat,desc:'',url:'',github:'',tech:[],order:0,status:'draft',featured:false,pinned:false};
   const list=document.getElementById('proj-list-admin');
   list.insertAdjacentHTML('afterbegin',projCardHTML(key,item,'projects'));
   syncCardOrders(list);

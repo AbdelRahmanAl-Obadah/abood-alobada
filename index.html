@@ -152,6 +152,7 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-app.js";
 import { getDatabase, ref, onValue, set, get, runTransaction } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-database.js";
+import * as Categories from "./js/categories.js";
 
 const firebaseConfig = {
   apiKey: "YOUR_APIKEY_HERE",
@@ -482,12 +483,15 @@ function renderExperience(d){
   reObserve();
 }
 
-function renderProjects(d, settings){
+function renderProjects(d, settings, categories){
   const grid=document.getElementById('proj-grid');
   if(!grid||!d) return;
+  const cats = categories || window._siteCategories || Categories.DEFAULT_CATEGORIES;
   const items = sortItems(d);
   const featProjKey = settings['featured-proj']||'';
   grid.innerHTML = items.map((item,i)=>{
+    const catSlug = Categories.normalizeCategorySlug(item.category||'', cats);
+    const catLabel = Categories.getCategoryLabel(cats, catSlug);
     const isFeatured = item.featured || item.pinned || item.key===featProjKey;
     const featClass = isFeatured ? 'featured' : '';
     const badgeHTML = isFeatured ? '<span class="proj-featured-badge" aria-label="Featured project">★</span>' : '';
@@ -499,25 +503,68 @@ function renderProjects(d, settings){
         </svg>
       </div>
       <div style="font-family:var(--ff-head);font-size:1.35rem;font-weight:400;letter-spacing:-.03em;color:var(--fg);line-height:1.15">${esc(item.title||'')}</div>
-      <div style="font-family:var(--ff-mono);font-size:.58rem;letter-spacing:.14em;color:var(--fg3);text-transform:uppercase">${esc(item.category||'project')}</div>
+      <div style="font-family:var(--ff-mono);font-size:.58rem;letter-spacing:.14em;color:var(--fg3);text-transform:uppercase">${esc(catLabel)}</div>
     </div>`;
-    return `<div class="proj-card ${featClass} reveal${i>0?' reveal-delay-'+(Math.min(i%4+1,4)):''}" data-category="${esc(item.category||'web')}" role="article">
+    return `<div class="proj-card ${featClass} reveal${i>0?' reveal-delay-'+(Math.min(i%4+1,4)):''}" data-category="${esc(catSlug)}" role="article">
       ${badgeHTML}
       <div class="proj-card-img" style="background:var(--bg3);flex-direction:column;gap:.5rem" aria-hidden="true">${imgContent}</div>
       <div class="proj-card-body">
-        <div class="proj-cat">${esc(item.category||'')}</div>
+        <div class="proj-cat">${esc(catLabel)}</div>
         <div class="proj-title">${esc(item.title||'')}</div>
         <div class="proj-desc">${esc(item.desc||'')}</div>
         <div class="proj-tech">${(item.tech||[]).map(t=>`<span>${esc(t)}</span>`).join('')}</div>
         <div class="proj-links">
           ${item.url?`<a href="${esc(item.url)}" target="_blank" rel="noopener noreferrer" class="proj-link" onclick="window._trackEvent('projClick')" aria-label="Visit ${esc(item.title)}">Visit <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1 9L9 1M9 1H4M9 1v5" stroke="currentColor" stroke-width="1.2"/></svg></a>`:''}
-          ${item.github?`<a href="${esc(item.github)}" target="_blank" rel="noopener noreferrer" class="proj-link" onclick="window._trackEvent('projClick')" aria-label="GitHub repo for ${esc(item.title)}">GitHub</a>`:''}
+          ${item.github?`<a href="${esc(item.github)}" target="_blank" rel="noopener noreferrer" class="proj-link" onclick="window._trackEvent('projClick')" aria-label="GitHub repo for ${esc(item.title)}">GitHub <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1 9L9 1M9 1H4M9 1v5" stroke="currentColor" stroke-width="1.2"/></svg></a>`:''}
         </div>
       </div>
     </div>`;
   }).join('');
   reObserve();
+  applyProjectFilter(window._activeProjectFilter);
 }
+//aaaaaaaa
+function renderProjectFilters(categories){
+  const container=document.getElementById('projects-filter');
+  if(!container) return;
+  const active=Categories.getSortedCategories(categories||{}, {activeOnly:true});
+  if(!active.length){
+    container.innerHTML='';
+    return;
+  }
+  if(!window._activeProjectFilter || !active.some(c=>c.slug===window._activeProjectFilter)){
+    window._activeProjectFilter=active[0].slug;
+  }
+  container.innerHTML=active.map(cat=>`
+    <button class="filter-btn${cat.slug===window._activeProjectFilter?' active':''}" data-proj="${esc(cat.slug)}" aria-pressed="${cat.slug===window._activeProjectFilter?'true':'false'}">${esc(cat.name)}</button>
+  `).join('');
+  bindProjectFilterButtons();
+  applyProjectFilter(window._activeProjectFilter);
+}
+
+function bindProjectFilterButtons(){
+  document.querySelectorAll('#projects-filter [data-proj]').forEach(btn=>{
+    btn.replaceWith(btn.cloneNode(true));
+  });
+  document.querySelectorAll('#projects-filter [data-proj]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      window._activeProjectFilter=btn.dataset.proj;
+      document.querySelectorAll('#projects-filter [data-proj]').forEach(b=>{
+        b.classList.toggle('active', b.dataset.proj===window._activeProjectFilter);
+        b.setAttribute('aria-pressed', b.dataset.proj===window._activeProjectFilter?'true':'false');
+      });
+      applyProjectFilter(window._activeProjectFilter);
+    });
+  });
+}
+
+function applyProjectFilter(cat){
+  if(!cat) return;
+  document.querySelectorAll('.proj-card').forEach(card=>{
+    card.style.display = card.dataset.category === cat ? '' : 'none';
+  });
+}
+window._applyProjectFilter = applyProjectFilter;
 
 function renderSkills(d){
   ['technical','professional','soft'].forEach(cat=>{
@@ -631,20 +678,25 @@ function setupListeners(){
   const settings = JSON.parse(localStorage.getItem('adminSettings')||'{}');
   const seo      = JSON.parse(localStorage.getItem('adminSEO')||'{}');
 
-  const sections = ['hero','about','highlights','experience','projects','skills','certifications','education','volunteering'];
+  const sections = ['hero','about','highlights','experience','categories','projects','skills','certifications','education','volunteering'];
   const siteData = {};
+  window._siteCategories = Categories.DEFAULT_CATEGORIES;
 
   let loaded = 0;
   sections.forEach(p=>{
     onValue(ref(db,'site/'+p), snap=>{
       const val = snap.val()||(p==='skills'?{technical:[],professional:[],soft:[]}:{});
       siteData[p] = val;
+      if(p==='categories'){
+        window._siteCategories = Categories.ensureDefaultCategories(val);
+        renderProjectFilters(window._siteCategories);
+      }
       // render each section as it arrives
       if(p==='hero')            renderHero(val, settings);
       if(p==='about')           renderAbout(val);
       if(p==='highlights')      renderHighlights(val);
       if(p==='experience')      renderExperience(val);
-      if(p==='projects')        renderProjects(val, settings);
+      if(p==='projects')        renderProjects(val, settings, window._siteCategories);
       if(p==='skills')          renderSkills(val);
       if(p==='certifications')  renderCertifications(val);
       if(p==='education')       renderEducation(val);
@@ -1470,13 +1522,7 @@ footer{padding:44px 0;border-top:1px solid var(--line);background:var(--bg2)}
   <div class="wrap">
     <div class="label reveal">Projects</div>
     <h2 id="proj-heading" class="section-title reveal reveal-delay-1">Work I'm<br>proud of.</h2>
-    <div class="projects-filter reveal reveal-delay-2" role="group" aria-label="Filter projects by category">
-      <button class="filter-btn active" data-proj="all" aria-pressed="true">All</button>
-      <button class="filter-btn" data-proj="web" aria-pressed="false">Web</button>
-      <button class="filter-btn" data-proj="mobile" aria-pressed="false">Mobile / App</button>
-      <button class="filter-btn" data-proj="blog" aria-pressed="false">Blogs</button>
-      <button class="filter-btn" data-proj="competition" aria-pressed="false">Competition</button>
-    </div>
+    <div class="projects-filter reveal reveal-delay-2" id="projects-filter" role="group" aria-label="Filter projects by category"></div>
     <div class="proj-grid" id="proj-grid" aria-live="polite" aria-label="Projects"></div>
   </div>
 </section>
@@ -1804,22 +1850,9 @@ const cntObs = new IntersectionObserver(entries => {
 document.querySelectorAll('[data-count]').forEach(el => cntObs.observe(el));
 
 // ============================================================
-// PROJECT FILTER
+// PROJECT FILTER — built dynamically from Firebase categories
 // ============================================================
-document.querySelectorAll('[data-proj]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const cat = btn.dataset.proj;
-    document.querySelectorAll('[data-proj]').forEach(b => {
-      b.classList.remove('active');
-      b.setAttribute('aria-pressed','false');
-    });
-    btn.classList.add('active');
-    btn.setAttribute('aria-pressed','true');
-    document.querySelectorAll('.proj-card').forEach(card => {
-      card.style.display = (cat === 'all' || card.dataset.category === cat) ? '' : 'none';
-    });
-  });
-});
+window._activeProjectFilter = null;
 
 // ============================================================
 // PUBLIC SEARCH
