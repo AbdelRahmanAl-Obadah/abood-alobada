@@ -696,14 +696,55 @@ if(!isDemo){
 }
 
 function setupListeners(){
-  const settings = JSON.parse(localStorage.getItem('adminSettings')||'{}');
+  const DEFAULT_SETTINGS = {
+    'dark-mode': true,
+    animations: true,
+    lazy: true,
+    analytics: true,
+    email: 'aboodalobada0@gmail.com',
+    linkedin: 'https://www.linkedin.com/in/abdel-rahman-al-obadah-4b9b40383/',
+    github: 'https://github.com/AbdelRahmanAl-Obadah/',
+    resume: '',
+    'featured-proj': 'proj1'
+  };
+  function normalizeSiteSettings(raw){
+    const input = raw && typeof raw === 'object' ? raw : {};
+    return {
+      'dark-mode': input['dark-mode'] !== false,
+      animations: input.animations !== false,
+      lazy: input.lazy !== false,
+      analytics: input.analytics !== false,
+      email: input.email !== undefined ? String(input.email) : DEFAULT_SETTINGS.email,
+      linkedin: input.linkedin !== undefined ? String(input.linkedin) : DEFAULT_SETTINGS.linkedin,
+      github: input.github !== undefined ? String(input.github) : DEFAULT_SETTINGS.github,
+      resume: input.resume !== undefined ? String(input.resume) : DEFAULT_SETTINGS.resume,
+      'featured-proj': input['featured-proj'] !== undefined ? String(input['featured-proj']) : DEFAULT_SETTINGS['featured-proj']
+    };
+  }
+  let settings = normalizeSiteSettings(JSON.parse(localStorage.getItem('adminSettings')||'{}'));
+  localStorage.setItem('adminSettings', JSON.stringify(settings));
   const seo      = JSON.parse(localStorage.getItem('adminSEO')||'{}');
 
   const sections = ['hero','about','highlights','experience','categories','projects','skills','certifications','education','volunteering'];
   const siteData = {};
+  let loaded = 0;
   window._siteCategories = Categories.DEFAULT_CATEGORIES;
 
-  let loaded = 0;
+  function applySiteSettings(nextSettings){
+    settings = normalizeSiteSettings(nextSettings);
+    localStorage.setItem('adminSettings', JSON.stringify(settings));
+    applyAppearanceSettings();
+    if(siteData.hero) renderHero(siteData.hero, settings);
+    if(siteData.projects) renderProjects(siteData.projects, settings, window._siteCategories);
+    applyContactSettings(siteData);
+    if(loaded >= sections.length){
+      buildStructuredData(siteData, seo, settings);
+    }
+  }
+
+  onValue(ref(db,'site/settings'), snap => {
+    applySiteSettings(snap.exists() ? snap.val() || {} : JSON.parse(localStorage.getItem('adminSettings')||'{}'));
+  });
   sections.forEach(p=>{
     onValue(ref(db,'site/'+p), snap=>{
       const val = snap.val()||(p==='skills'?{technical:[],professional:[],soft:[]}:{});

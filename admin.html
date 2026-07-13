@@ -2626,7 +2626,10 @@ window.importBackup=async function(input){
       if(window._loadAll) window._loadAll();
     }
     if(data.seo) localStorage.setItem('adminSEO',JSON.stringify(data.seo));
-    if(data.settings) localStorage.setItem('adminSettings',JSON.stringify(data.settings));
+    if(data.settings){
+      const settings=applySettingsForm(data.settings);
+      await persistSettings(settings);
+    }
     toast('Backup imported ✓');
     loadSEO();
     loadLocalSettings();
@@ -2635,30 +2638,92 @@ window.importBackup=async function(input){
 };
 
 // ===== SETTINGS =====
-function loadLocalSettings(){
-  const s=JSON.parse(localStorage.getItem('adminSettings')||'{}');
-  ['dark-mode','animations','lazy','analytics'].forEach(f=>{
-    const el=document.getElementById('set-'+f);
-    if(el) el.checked=s[f]!==false;
-  });
-  ['email','linkedin','github','resume','featured-proj'].forEach(f=>{
-    const el=document.getElementById('set-'+f);
-    if(el&&s[f]!==undefined) el.value=s[f];
-  });
-  renderBackupList();
+const SETTINGS_PATH='site/settings';
+const DEFAULT_SETTINGS={
+  'dark-mode':true,
+  animations:true,
+  lazy:true,
+  analytics:true,
+  email:'aboodalobada0@gmail.com',
+  linkedin:'https://www.linkedin.com/in/abdel-rahman-al-obadah-4b9b40383/',
+  github:'https://github.com/AbdelRahmanAl-Obadah/',
+  resume:'',
+  'featured-proj':'proj1'
+};
+let settingsSubscription=null;
+
+function normalizeSettings(raw){
+  const input=raw&&typeof raw==='object'?raw:{};
+  return {
+    'dark-mode':input['dark-mode']!==false,
+    animations:input.animations!==false,
+    lazy:input.lazy!==false,
+    analytics:input.analytics!==false,
+    email:input.email!==undefined?String(input.email):DEFAULT_SETTINGS.email,
+    linkedin:input.linkedin!==undefined?String(input.linkedin):DEFAULT_SETTINGS.linkedin,
+    github:input.github!==undefined?String(input.github):DEFAULT_SETTINGS.github,
+    resume:input.resume!==undefined?String(input.resume):DEFAULT_SETTINGS.resume,
+    'featured-proj':input['featured-proj']!==undefined?String(input['featured-proj']):DEFAULT_SETTINGS['featured-proj']
+  };
 }
-window.saveSettings=function(){
-  const s={};
+function readSettingsForm(){
+  return normalizeSettings({
+    'dark-mode':document.getElementById('set-dark-mode')?.checked,
+    animations:document.getElementById('set-animations')?.checked,
+    lazy:document.getElementById('set-lazy')?.checked,
+    analytics:document.getElementById('set-analytics')?.checked,
+    email:document.getElementById('set-email')?.value||'',
+    linkedin:document.getElementById('set-linkedin')?.value||'',
+    github:document.getElementById('set-github')?.value||'',
+    resume:document.getElementById('set-resume')?.value||'',
+    'featured-proj':document.getElementById('set-featured-proj')?.value||''
+  });
+}
+function applySettingsForm(s){
+  const settings=normalizeSettings(s);
+  localStorage.setItem('adminSettings',JSON.stringify(settings));
   ['dark-mode','animations','lazy','analytics'].forEach(f=>{
     const el=document.getElementById('set-'+f);
-    if(el) s[f]=el.checked;
+    if(el) el.checked=settings[f]!==false;
   });
   ['email','linkedin','github','resume','featured-proj'].forEach(f=>{
     const el=document.getElementById('set-'+f);
-    if(el) s[f]=el.value;
+    if(el) el.value=settings[f]||'';
   });
-  localStorage.setItem('adminSettings',JSON.stringify(s));
-  toast('Settings saved ✓');
+  return settings;
+}
+async function persistSettings(settings){
+  localStorage.setItem('adminSettings',JSON.stringify(settings));
+  if(window._fb && window._fb.db && !window._fb.isDemo){
+    await fbSet(SETTINGS_PATH,settings);
+  }
+}
+function watchSettings(){
+  if(settingsSubscription){
+    try{ settingsSubscription(); }catch(_){}
+    settingsSubscription=null;
+  }
+  if(!(window._fb && window._fb.db && !window._fb.isDemo)) return;
+  settingsSubscription=window._fb.onValue(window._fb.ref(window._fb.db,SETTINGS_PATH),snap=>{
+    const next=normalizeSettings(snap.exists() ? snap.val()||{} : JSON.parse(localStorage.getItem('adminSettings')||'{}'));
+    applySettingsForm(next);
+  });
+}
+function loadLocalSettings(){
+  const cached=normalizeSettings(JSON.parse(localStorage.getItem('adminSettings')||'{}'));
+  applySettingsForm(cached);
+  renderBackupList();
+  watchSettings();
+}
+window.saveSettings=async function(){
+  const settings=readSettingsForm();
+  applySettingsForm(settings);
+  try{
+    await persistSettings(settings);
+    toast('Settings saved ✓');
+  }catch(e){
+    toast('Saved locally; Firebase sync failed: '+e.message,'info');
+  }
 };
 
 // ===== RESET ANALYTICS =====
