@@ -160,7 +160,7 @@
 <!-- Firebase -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-app.js";
-import { getDatabase, ref, onValue, set, get, runTransaction } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-database.js";
+import { getDatabase, ref, set, get, runTransaction } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-database.js";
 import * as Categories from "./js/categories.js";
 
 const firebaseConfig = {
@@ -674,12 +674,8 @@ if(!isDemo){
     window._fbAnalyticsReady = true;
 
     // Sync real analytics from Firebase into localStorage for admin panel
-    import("https://www.gstatic.com/firebasejs/11.9.0/firebase-database.js").then(({getDatabase:gd, ref:r, get:g, onValue:ov})=>{
-      const adb = getDatabase(app);
-      ov(r(adb,'analytics'), snap => {
-        syncAnalyticsFromFirebase(snap);
-      });
-    }).catch(()=>{});
+    // without keeping a live realtime subscription open on the homepage.
+    get(ref(db,'analytics')).then(syncAnalyticsFromFirebase).catch(()=>{});
 
     get(ref(db,'site')).then(async snap=>{
       if(!snap.exists()){
@@ -1050,6 +1046,11 @@ ul{list-style:none}
   position:relative;
   isolation:isolate;
 }
+.hero-avatar picture{
+  width:100%;
+  height:100%;
+  display:block;
+}
 
 [data-theme="dark"] .hero-avatar{
   background:#09090a; /* Dark mode */
@@ -1068,7 +1069,6 @@ ul{list-style:none}
   filter:grayscale(1) sepia(.06) saturate(.72) contrast(1.05) brightness(1.02) hue-rotate(8deg);
   transform:scale(1.08) translateX(4%);position:relative;z-index:0;
   pointer-events:none;-webkit-user-drag:none;user-select:none;
-  loading:lazy;
 }
 .hero-location-note{margin-top:.8rem;font-family:var(--ff-mono);font-size:.58rem;letter-spacing:.1em;color:var(--fg3);text-transform:uppercase}
 .hero-scroll{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.6rem;font-family:var(--ff-mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--fg3);animation:heroScroll 2.5s ease-in-out infinite}
@@ -1468,7 +1468,10 @@ footer{padding:44px 0;border-top:1px solid var(--line);background:var(--bg2)}
           <span id="hero-subtitle"></span>
         </div>
         <div class="hero-avatar" id="hero-avatar">
-          <img src="me.png" alt="Portrait of Abdel Rahman Al-Obadah" class="hero-art" loading="eager" fetchpriority="high" decoding="async">
+          <picture>
+            <source type="image/jpeg" srcset="me-665.jpg 665w, me.png 832w" sizes="(max-width: 768px) 90vw, 665px">
+            <img src="me.png" alt="Portrait of Abdel Rahman Al-Obadah" class="hero-art" width="665" height="1005" loading="eager" fetchpriority="high" decoding="async">
+          </picture>
         </div>
         <div class="hero-location-note" id="hero-location" aria-label="Location"></div>
       </div>
