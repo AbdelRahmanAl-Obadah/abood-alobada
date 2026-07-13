@@ -5,3 +5,4 @@ Disallow: /admin.html
 Disallow: /cgi-bin/
 
 Sitemap: https://www.aboodalobada.space/sitemap.xml
+Host: www.aboodalobada.space

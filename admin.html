@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Admin Panel — Abood.dev</title>
+<title>Admin Panel — Abdel Rahman Al-Obadah</title>
 <meta name="robots" content="noindex,nofollow">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -359,6 +359,10 @@ textarea{resize:vertical;line-height:1.6}
   </div>
   <div class="nav-group">
     <div class="nav-group-label">Overview</div>
+    <div class="nav-item" data-page="seo">
+      <svg width="14" height="14" fill="none" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.3"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      SEO & Metadata
+    </div>
     <div class="nav-item active" data-page="dashboard">
       <svg width="14" height="14" fill="none" viewBox="0 0 16 16"><rect x="1" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="1" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/></svg>
       Dashboard
@@ -413,10 +417,6 @@ textarea{resize:vertical;line-height:1.6}
   </div>
   <div class="nav-group">
     <div class="nav-group-label">Tools</div>
-    <div class="nav-item" data-page="seo">
-      <svg width="14" height="14" fill="none" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.3"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-      SEO & Metadata
-    </div>
     <div class="nav-item" data-page="backup">
       <svg width="14" height="14" fill="none" viewBox="0 0 16 16"><path d="M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 11v2a1 1 0 001 1h8a1 1 0 001-1v-2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
       Backup & Restore
@@ -2459,15 +2459,15 @@ function loadSEO(){
   // Set smart defaults if fields are empty
   const defaults = {
     title: 'Abdel Rahman Al-Obadah | Web Developer, SEO & Firebase Specialist',
-    desc: 'Abdel Rahman Al-Obadah is a web developer from Abu Dhabi and Irbid building fast, SEO-friendly websites, Firebase-powered experiences, and clean UI/UX.',
+    desc: 'Abdel Rahman Al-Obadah is a web developer in Abu Dhabi and Irbid building fast, SEO-friendly websites, Firebase-powered experiences, and polished UI/UX.',
     keywords: 'Abdel Rahman Al-Obadah, Abood Alobada, web developer, Firebase, SEO, UI/UX, JavaScript, Flutter, UAE, Jordan',
     author: 'Abdel Rahman Al-Obadah',
     canonical: 'https://www.aboodalobada.space/',
     'og-title': 'Abdel Rahman Al-Obadah | Web Developer, SEO & Firebase Specialist',
-    'og-desc': 'Web Developer building impactful digital experiences through code, creativity, and leadership.',
+    'og-desc': 'Web Developer in Abu Dhabi and Irbid building fast, SEO-friendly websites and polished UI/UX.',
     'og-image': 'https://www.aboodalobada.space/og-image.svg',
     'tw-title': 'Abdel Rahman Al-Obadah | Web Developer, SEO & Firebase Specialist',
-    'tw-desc': 'Fast, SEO-friendly portfolio powered by Firebase and clean SVG visuals.',
+    'tw-desc': 'Fast, SEO-friendly portfolio powered by Firebase and polished SVG visuals.',
     'tw-image': 'https://www.aboodalobada.space/og-image.svg'
   };
   ['title','desc','keywords','author','canonical','og-title','og-desc','og-image','tw-title','tw-desc','tw-image','jsonld'].forEach(f=>{
@@ -2493,7 +2493,7 @@ window.saveSEO=function(){
 };
 window.updateSEOPreview=function(){
   const title=document.getElementById('seo-title')?.value||'Abdel Rahman Al-Obadah — Portfolio';
-  const desc=document.getElementById('seo-desc')?.value||'Web Developer with 4+ years of experience.';
+  const desc=document.getElementById('seo-desc')?.value||'Abdel Rahman Al-Obadah is a web developer in Abu Dhabi and Irbid building fast, SEO-friendly websites.';
   const ogTitle=document.getElementById('seo-og-title')?.value||title;
   const ogDesc=document.getElementById('seo-og-desc')?.value||desc;
   const ogImg=document.getElementById('seo-og-image')?.value||'';

@@ -3,17 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="application-name" content="Abdel Rahman Al-Obadah">
+<meta name="apple-mobile-web-app-title" content="Abdel Rahman Al-Obadah">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <!-- ============================================================
      SEO — Primary Meta Tags
      ============================================================ -->
 <title>Abdel Rahman Al-Obadah | Web Developer, SEO &amp; Firebase Specialist</title>
-<meta name="description" content="Abdel Rahman Al-Obadah is a web developer from Abu Dhabi and Irbid building fast, SEO-friendly websites, Firebase-powered experiences, and clean UI/UX.">
+<meta name="description" content="Abdel Rahman Al-Obadah is a web developer in Abu Dhabi and Irbid building fast, SEO-friendly websites, Firebase-powered experiences, and polished UI/UX.">
 <meta name="author" content="Abdel Rahman Al-Obadah">
 <meta name="keywords" content="Abdel Rahman Al-Obadah, Abood Alobada, web developer, Firebase, SEO, UI/UX, JavaScript, Flutter, UAE, Jordan">
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 <meta name="googlebot" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://www.aboodalobada.space/" id="meta-canonical">
 <link rel="alternate" hreflang="en" href="https://www.aboodalobada.space/">
+<link rel="alternate" hreflang="x-default" href="https://www.aboodalobada.space/">
 <meta name="theme-color" content="#faf9f7" id="meta-theme-color">
 <!-- ============================================================
      Open Graph — Social Sharing
@@ -23,8 +27,9 @@
 <meta property="og:url" content="https://www.aboodalobada.space/" id="meta-og-url">
 <meta property="og:site_name" content="Abdel Rahman Al-Obadah">
 <meta property="og:title" content="Abdel Rahman Al-Obadah | Web Developer, SEO &amp; Firebase Specialist" id="meta-og-title">
-<meta property="og:description" content="Web Developer building impactful digital experiences through code, creativity, and leadership." id="meta-og-desc">
+<meta property="og:description" content="Web Developer in Abu Dhabi and Irbid building fast, SEO-friendly websites, Firebase-powered experiences, and polished UI/UX." id="meta-og-desc">
 <meta property="og:image" content="https://www.aboodalobada.space/og-image.svg" id="meta-og-image">
+<meta property="og:image:secure_url" content="https://www.aboodalobada.space/og-image.svg">
 <meta property="og:image:type" content="image/svg+xml">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -38,7 +43,7 @@
 <meta name="twitter:site" content="@AbdelObadah">
 <meta name="twitter:creator" content="@AbdelObadah">
 <meta name="twitter:title" content="Abdel Rahman Al-Obadah | Web Developer, SEO &amp; Firebase Specialist" id="meta-tw-title">
-<meta name="twitter:description" content="Fast, SEO-friendly portfolio powered by Firebase and clean SVG visuals." id="meta-tw-desc">
+<meta name="twitter:description" content="Fast, SEO-friendly portfolio powered by Firebase and polished SVG visuals." id="meta-tw-desc">
 <meta name="twitter:image" content="https://www.aboodalobada.space/og-image.svg" id="meta-tw-image">
 <meta name="twitter:image:alt" content="Abdel Rahman Al-Obadah portfolio preview">
 <!-- ============================================================
@@ -46,6 +51,9 @@
      ============================================================ -->
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="favicon.svg">
+<link rel="me" href="https://www.linkedin.com/in/abdel-rahman-al-obadah-4b9b40383/">
+<link rel="me" href="https://github.com/AbdelRahmanAl-Obadah/">
+<link rel="me" href="https://x.com/AbdelObadah">
 <!-- ============================================================
      Performance: Preconnect & Font Loading
      ============================================================ -->
@@ -70,12 +78,7 @@
       "alternateName": ["Abood Alobada", "Abood.dev"],
       "description": "Portfolio site for Abdel Rahman Al-Obadah, a web developer focused on SEO, Firebase, and UI/UX.",
       "inLanguage": "en-US",
-      "publisher": { "@id": "https://www.aboodalobada.space/#person" },
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": { "@type": "EntryPoint", "urlTemplate": "https://www.aboodalobada.space/?s={search_term_string}" },
-        "query-input": "required name=search_term_string"
-      }
+      "publisher": { "@id": "https://www.aboodalobada.space/#person" }
     },
     {
       "@type": "Person",
@@ -91,6 +94,7 @@
         "width": 1200,
         "height": 630
       },
+      "mainEntityOfPage": { "@id": "https://www.aboodalobada.space/#webpage" },
       "address": [
         { "@type": "PostalAddress", "addressLocality": "Abu Dhabi", "addressCountry": "AE" },
         { "@type": "PostalAddress", "addressLocality": "Irbid", "addressCountry": "JO" }
@@ -100,6 +104,11 @@
         "https://github.com/AbdelRahmanAl-Obadah/",
         "https://x.com/AbdelObadah"
       ],
+      "hasOccupation": {
+        "@type": "Occupation",
+        "name": "Web Developer",
+        "description": "Builds SEO-friendly websites and Firebase-powered web experiences."
+      },
       "knowsAbout": ["Web Development", "JavaScript", "Firebase", "SEO", "UI/UX", "Flutter", "React", "HTML5", "CSS", "Tailwind CSS"],
       "knowsLanguage": [
         { "@type": "Language", "name": "Arabic" },
@@ -124,7 +133,7 @@
         "@type": "ImageObject",
         "url": "https://www.aboodalobada.space/og-image.svg"
       },
-      "dateModified": "2025-06-01",
+      "dateModified": "2026-07-14",
       "breadcrumb": {
         "@type": "BreadcrumbList",
         "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.aboodalobada.space/" }]
@@ -285,7 +294,11 @@ function applySEO(){
   // OG
   setMeta('property','og:title',       seo['og-title']||seo.title);
   setMeta('property','og:description', seo['og-desc']||seo.desc);
-  if(seo['og-image']){ const el=document.getElementById('meta-og-image'); if(el) el.content=seo['og-image']; }
+  if(seo['og-image']){
+    const el=document.getElementById('meta-og-image'); if(el) el.content=seo['og-image'];
+    const secure=document.querySelector('meta[property="og:image:secure_url"]');
+    if(secure) secure.content=seo['og-image'];
+  }
   if(seo.canonical){ const el=document.getElementById('meta-og-url'); if(el) el.content=seo.canonical; }
   // Twitter
   setMeta('name','twitter:title',       seo['tw-title']||seo.title);
@@ -357,7 +370,7 @@ function applyContactSettings(siteData){
 function buildStructuredData(siteData, seo, settings){
   const canonical = seo.canonical||'https://www.aboodalobada.space/';
   const name      = (siteData.hero&&siteData.hero.title)||'Abdel Rahman Al-Obadah';
-  const desc      = seo.desc||'Web developer portfolio';
+  const desc      = seo.desc||'Abdel Rahman Al-Obadah is a web developer in Abu Dhabi and Irbid building fast, SEO-friendly websites and Firebase-powered experiences.';
   const github    = settings.github||'https://github.com/AbdelRahmanAl-Obadah/';
   const linkedin  = settings.linkedin||'https://www.linkedin.com/in/abdel-rahman-al-obadah-4b9b40383/';
   const ogImage   = seo['og-image']||canonical+'og-image.svg';
@@ -386,7 +399,13 @@ function buildStructuredData(siteData, seo, settings){
       "@type":"Person","@id":canonical+"#person","name":name,
       "alternateName":"Abood Alobada","jobTitle":"Web Developer",
       "url":canonical,"image":ogImage,
+      "mainEntityOfPage":{"@id":canonical+"#webpage"},
       "sameAs":[linkedin,github,"https://x.com/AbdelObadah"],
+      "hasOccupation":{
+        "@type":"Occupation",
+        "name":"Web Developer",
+        "description":"Builds SEO-friendly websites and Firebase-powered web experiences."
+      },
       "knowsAbout":allSkills,
       ...(certs.length?{"hasCredential":certs}:{}),
       ...(projs.length?{"subjectOf":projs}:{})
@@ -396,7 +415,9 @@ function buildStructuredData(siteData, seo, settings){
       "name":seo.title||name+" | Portfolio",
       "about":{"@id":canonical+"#person"},
       "isPartOf":{"@id":canonical+"#website"},
-      "primaryImageOfPage":{"@type":"ImageObject","url":ogImage}
+      "primaryImageOfPage":{"@type":"ImageObject","url":ogImage},
+      "dateModified":"2026-07-14",
+      "mainEntity":{"@id":canonical+"#person"}
     }
   ];
 
@@ -1715,7 +1736,11 @@ window.addEventListener('load', () => {
   sm('name','robots',`${ri?'index':'noindex'},${rf?'follow':'nofollow'},max-image-preview:large`);
   sm('property','og:title',seo['og-title']||seo.title);
   sm('property','og:description',seo['og-desc']||seo.desc);
-  if(seo['og-image']){const e=document.getElementById('meta-og-image');if(e)e.content=seo['og-image'];}
+  if(seo['og-image']){
+    const e=document.getElementById('meta-og-image');if(e)e.content=seo['og-image'];
+    const secure=document.querySelector('meta[property="og:image:secure_url"]');
+    if(secure) secure.content=seo['og-image'];
+  }
   sm('name','twitter:title',seo['tw-title']||seo.title);
   sm('name','twitter:description',seo['tw-desc']||seo.desc);
   if(seo['tw-image']){const e=document.getElementById('meta-tw-image');if(e)e.content=seo['tw-image'];}
