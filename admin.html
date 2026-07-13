@@ -35,8 +35,6 @@ textarea{resize:vertical;line-height:1.6}
 .login-btn:hover{opacity:.85}
 .login-err{color:var(--red);font-size:.82rem;font-family:var(--fm)}
 
-<<<<<<< ours
-=======
 body.admin-locked #loginScreen,
 body.admin-locked #app,
 body.admin-locked .status-bar,
@@ -61,8 +59,6 @@ body.admin-locked .kbd-overlay{display:none !important}
   padding:.7rem 1rem;border-radius:var(--r);border:1px solid var(--line-hi)
 }
 body.admin-locked .admin-locked-screen{display:flex}
-
->>>>>>> theirs
 /* LAYOUT */
 #app{display:none;min-height:100vh}
 .shell{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
@@ -345,12 +341,9 @@ body.admin-locked .admin-locked-screen{display:flex}
 }
 </style>
 </head>
-<<<<<<< ours
 <body>
-=======
-<body class="admin-locked">
 
-<div class="admin-locked-screen" id="adminLocked">
+<div class="admin-locked-screen" id="adminLocked" style="display:none">
   <div class="locked-box">
     <div class="locked-title">Access Disabled</div>
     <h1>Admin panel is currently closed.</h1>
@@ -358,7 +351,6 @@ body.admin-locked .admin-locked-screen{display:flex}
     <a href="/" rel="nofollow">Return Home</a>
   </div>
 </div>
->>>>>>> theirs
 
 <!-- LOGIN -->
 <div id="loginScreen">
@@ -1004,14 +996,11 @@ const firebaseConfig = {
 };
 
 const isDemo = firebaseConfig.apiKey === "YOUR_API_KEY";
-<<<<<<< ours
-=======
-const ADMIN_PANEL_LOCKED = true;
+const ADMIN_PANEL_LOCKED = false;
 
-if(ADMIN_PANEL_LOCKED){
-  throw new Error('Admin panel disabled');
+if (ADMIN_PANEL_LOCKED) {
+  document.body.classList.add('admin-locked');
 }
->>>>>>> theirs
 
 let app, auth, db;
 try {
