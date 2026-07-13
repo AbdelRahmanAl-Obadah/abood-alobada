@@ -57,11 +57,8 @@
 <!-- ============================================================
      Performance: Preconnect & Font Loading
      ============================================================ -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="dns-prefetch" href="https://www.gstatic.com">
 <link rel="dns-prefetch" href="https://firebaseio.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
 
 <!-- ============================================================
      JSON-LD Structured Data — dynamically enriched from Firebase
@@ -161,7 +158,91 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-app.js";
 import { getDatabase, ref, set, get, runTransaction } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-database.js";
-import * as Categories from "./js/categories.js";
+const Categories = {
+  DEFAULT_CATEGORIES: {
+    cat_web: { name: 'Web', slug: 'web', order: 1, active: true },
+    cat_mobile: { name: 'Mobile App', slug: 'mobile-app', order: 2, active: true },
+    cat_macos: { name: 'macOS', slug: 'macos', order: 3, active: true },
+    cat_ai: { name: 'AI', slug: 'ai', order: 4, active: true },
+    cat_competition: { name: 'Competition', slug: 'competition', order: 5, active: true },
+    cat_blogs: { name: 'Blogs', slug: 'blogs', order: 6, active: true }
+  },
+  LEGACY_SLUG_MAP: {
+    blog: 'blogs',
+    blogs: 'blogs',
+    mobile: 'mobile-app',
+    'mobile-app': 'mobile-app',
+    'mobile app': 'mobile-app',
+    mobile_app: 'mobile-app',
+    app: 'mobile-app',
+    web: 'web',
+    competition: 'competition',
+    macos: 'macos',
+    mac: 'macos',
+    ai: 'ai',
+    'artificial intelligence': 'ai'
+  },
+  slugify(name) {
+    return String(name || '')
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  },
+  getSortedCategories(categories, { activeOnly = false } = {}) {
+    const list = Object.entries(categories || {}).map(([key, cat]) => ({
+      key,
+      name: cat.name || '',
+      slug: cat.slug || Categories.slugify(cat.name || key),
+      order: Number(cat.order) || 0,
+      active: cat.active !== false
+    }));
+    list.sort((a, b) => {
+      if (a.order !== b.order) return a.order - b.order;
+      return a.name.localeCompare(b.name);
+    });
+    return activeOnly ? list.filter(c => c.active) : list;
+  },
+  getCategorySlugs(categories) {
+    return Categories.getSortedCategories(categories).map(c => c.slug);
+  },
+  findCategoryBySlug(categories, slug) {
+    if (!slug) return null;
+    const normalized = String(slug).trim().toLowerCase();
+    return Categories.getSortedCategories(categories).find(c => c.slug === normalized) || null;
+  },
+  normalizeCategorySlug(raw, categories) {
+    if (raw === null || raw === undefined) return '';
+    const key = String(raw).trim().toLowerCase();
+    if (!key) return '';
+    const mapped = Categories.LEGACY_SLUG_MAP[key] || key.replace(/\s+/g, '-');
+    const slugs = Categories.getCategorySlugs(categories);
+    if (slugs.includes(mapped)) return mapped;
+    const byName = Categories.getSortedCategories(categories).find(
+      c => c.name.trim().toLowerCase() === key || c.name.trim().toLowerCase() === String(raw).trim().toLowerCase()
+    );
+    if (byName) return byName.slug;
+    return mapped;
+  },
+  getCategoryLabel(categories, slug) {
+    if (!slug) return 'Uncategorized';
+    const normalized = Categories.normalizeCategorySlug(slug, categories);
+    const cat = Categories.findCategoryBySlug(categories, normalized);
+    if (cat) return cat.name;
+    if (Categories.LEGACY_SLUG_MAP[String(slug).trim().toLowerCase()]) {
+      const legacy = Categories.normalizeCategorySlug(slug, categories);
+      const legacyCat = Categories.findCategoryBySlug(categories, legacy);
+      if (legacyCat) return legacyCat.name;
+    }
+    return String(slug);
+  },
+  ensureDefaultCategories(existing) {
+    if (!existing || !Object.keys(existing).length) {
+      return structuredClone(Categories.DEFAULT_CATEGORIES);
+    }
+    return existing;
+  }
+};
 
 const firebaseConfig = {
   apiKey: "YOUR_APIKEY_HERE",
@@ -738,11 +819,14 @@ function setupListeners(){
     }
   }
 
-  onValue(ref(db,'site/settings'), snap => {
+  get(ref(db,'site/settings')).then(snap => {
     applySiteSettings(snap.exists() ? snap.val() || {} : JSON.parse(localStorage.getItem('adminSettings')||'{}'));
+  }).catch(() => {
+    applySiteSettings(JSON.parse(localStorage.getItem('adminSettings')||'{}'));
   });
+
   sections.forEach(p=>{
-    onValue(ref(db,'site/'+p), snap=>{
+    get(ref(db,'site/'+p)).then(snap => {
       const val = snap.val()||(p==='skills'?{technical:[],professional:[],soft:[]}:{});
       siteData[p] = val;
       if(p==='categories'){
@@ -760,6 +844,14 @@ function setupListeners(){
       if(p==='education')       renderEducation(val);
       if(p==='volunteering')    renderVolunteering(val);
       if(p==='projects')        applyContactSettings(val);
+      loaded++;
+      if(loaded===sections.length){
+        buildSearchIndex(siteData);
+        buildStructuredData(siteData, seo, settings);
+      }
+    }).catch(() => {
+      const val = p==='skills'?{technical:[],professional:[],soft:[]}:{};
+      siteData[p] = val;
       loaded++;
       if(loaded===sections.length){
         buildSearchIndex(siteData);
@@ -783,9 +875,9 @@ window._firebaseLoaded = true;
   --line:rgba(0,0,0,.08);--line-hi:rgba(0,0,0,.15);
   --fg:#1a1714;--fg2:#4a4540;--fg3:#8a8480;
   --accent:#2a2420;
-  --ff-head:'Playfair Display',serif;
-  --ff-body:'DM Sans',sans-serif;
-  --ff-mono:'DM Mono',monospace;
+  --ff-head:ui-serif,Georgia,"Times New Roman",serif;
+  --ff-body:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --ff-mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;
   --ease:cubic-bezier(.22,1,.36,1);
   --spring:cubic-bezier(.34,1.56,.64,1);
   --featured-ring:rgba(42,36,32,.18);
